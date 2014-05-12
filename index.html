@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ze Media PC of DOOM</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
+    	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    	<link href="css/main.css?v=0.01" rel="stylesheet" media="screen">
+    </head>
+    <body>
+    	<div class="container-fluid">
+    		<div class="navbar navbar-inverse" id="main_nav_container">
+    			<div class="navbar-inner">
+    				<ul class="nav navbar-nav" id="main_nav">
+    				</ul>
+    			</div>
+    		</div>
+
+            <iframe frameborder="0" id="site" style="width: 100%; height: 100%; display: none"></iframe>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1>Dashboard</h1>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <button class="pull-right btn btn-success" onclick="RunXBMCCommand('VideoLibrary.Scan')">Update XBMC Video Library</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Upcoming TV Shows -->
+                        <div id="upcoming_shows"></div>
+
+                        <div id="downloaded_shows"></div>
+
+                        <div id="available_movies"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Disk Space Usage</h5>
+                        <div class="row" id="disk_space_charts"></div>
+
+                        <div id="temperatures_list"></div>
+                        <div id="fans_list"></div>
+                    </div>
+                </div>
+
+                <div id="sabnzbd_state">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Current Download Speed</h5>
+                            <div id="speed_chart" style="width: 100%; height: 300px;"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <h5>Download Speed History</h5>
+                            <div id="speed_history_chart" style="width: 100%; height: 300px;"></div>
+                        </div>
+                    </div>
+                    <div class="row" id="download_queue_row" style="display: none">
+                        <div class="col-md-12">
+                            <h5>Download Queue <span class="pull-right" id="download_time_remain" style="display: none"></span></h5>
+                            <table class="table table-striped table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th style="width: 140px;">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="download_queue_body">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    	</div>
+
+    	<script src="http://code.jquery.com/jquery.js"></script>
+    	<script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/sprintf.min.js"></script>
+        <script src="js/amcharts/amcharts.js"></script>
+        <script src="js/amcharts/gauge.js"></script>
+        <script src="js/amcharts/pie.js"></script>
+        <script src="js/amcharts/serial.js"></script>
+
+        <script src="js/MediaDash/Settings.js"></script>
+        <script src="js/MediaDash/Base.js"></script>
+        <script src="js/MediaDash/Util.js"></script>
+
+        <script src="js/MediaDash/NZBDrone.js"></script>
+        <script src="js/MediaDash/NZBGet.js"></script>
+        <script src="js/MediaDash/SysInfo.js"></script>
+        <script src="js/MediaDash/XBMC.js"></script>
+
+    	<script src="js/media_dash.js"></script>
+    </body>
+</html>

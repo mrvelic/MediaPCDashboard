@@ -1,0 +1,30 @@
+body {
+	font-family: 'Lato', sans-serif;
+	color: black;
+	background-color: black;
+}
+
+h1 {
+	font-weight: 700;
+}
+
+.main_header {
+	height: 64px;
+}
+
+.navbar, .row-fluid, .span12, .container-fluid, iframe {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.container {
+	background-color: #fff;
+}
+
+.span12, .row-fluid {
+	line-height: 0 !important;
+}
+
+iframe {
+	background-color: white;
+}
