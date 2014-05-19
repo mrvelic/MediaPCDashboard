@@ -46,6 +46,21 @@ var MediaDashSettings = {
     couchpotato_api_key          : "xx",
     couchpotato_refresh_interval : 20000,
 
+    // nzbdrone specific settings
+    NZBDrone: {
+        max_episode_name_legnth: 30,
+        show_air_times: false
+    },
+
+    // XBMC specific settings
+    XBMC: {
+        enable_update_library_button: true
+    },
+
+    // Other sysinfo settings
+    SysInfo: {
+        disk_space_pie: false,
+    },
 
     // PHPSysInfo Settings
     sysinfo_mount_points : 

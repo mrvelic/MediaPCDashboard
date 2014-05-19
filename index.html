@@ -23,9 +23,8 @@
                     <div class="col-md-6">
                         <h1>Dashboard</h1>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="util_buttons">
                         <br />
-                        <button class="pull-right btn btn-success" onclick="RunXBMCCommand('VideoLibrary.Scan')">Update XBMC Video Library</button>
                     </div>
                 </div>
 
@@ -36,12 +35,12 @@
 
                         <div id="downloaded_shows"></div>
 
-                        <div id="available_movies"></div>
+                        
                     </div>
                     <div class="col-md-6">
-                        <h5>Disk Space Usage</h5>
-                        <div class="row" id="disk_space_charts"></div>
+                        <div id="available_movies"></div>
 
+                        <div id="disk_space_charts"></div>
                         <div id="temperatures_list"></div>
                         <div id="fans_list"></div>
                     </div>
@@ -87,14 +86,15 @@
         <script src="js/amcharts/pie.js"></script>
         <script src="js/amcharts/serial.js"></script>
 
-        <script src="js/MediaDash/Settings.js"></script>
+        <script src="js/MediaDash/Settings.js?v=0.001"></script>
         <script src="js/MediaDash/Base.js"></script>
         <script src="js/MediaDash/Util.js"></script>
 
-        <script src="js/MediaDash/NZBDrone.js"></script>
+        <script src="js/MediaDash/NZBDrone.js?v=0.001"></script>
         <script src="js/MediaDash/NZBGet.js"></script>
-        <script src="js/MediaDash/SysInfo.js"></script>
-        <script src="js/MediaDash/XBMC.js"></script>
+        <script src="js/MediaDash/SysInfo.js?v=0.001"></script>
+        <script src="js/MediaDash/CouchPotato.js"></script>
+        <script src="js/MediaDash/XBMC.js?v=0.001"></script>
 
         <script src="js/media_dash.js"></script>
     </body>

@@ -1,5 +1,14 @@
 MediaDash.NZBDrone = {};
 
+MediaDash.NZBDrone.TruncateEpisodeTitle = function(title) {
+    if(title.length > MediaDashSettings.NZBDrone.max_episode_name_legnth)
+    {
+        return title.substring(0, MediaDashSettings.NZBDrone.max_episode_name_legnth) + "...";
+    }
+
+    return title;
+}
+
 MediaDash.NZBDrone.Update = function() {
     var settings = MediaDashSettings;
     var state = MediaDash.State;
@@ -20,11 +29,18 @@ MediaDash.NZBDrone.Update = function() {
             var show_date = new Date(show.airDateUtc);
 
             if(!show.hasFile) {
-                upcoming_show_table.push([show.series.title, show.title, MediaDash.Util.weekdays[show_date.getDay()] + " " + show_date.toLocaleTimeString()]);
+                upcoming_show_table.push(
+                    [
+                        sprintf("<strong>%s</strong>", show.series.title), 
+                        sprintf("S%02dE%02d", parseInt(show.seasonNumber), parseInt(show.episodeNumber)),
+                        nzbdrone.TruncateEpisodeTitle(show.title), 
+                        MediaDash.Util.weekdays[show_date.getDay()]
+                    ]
+                );
             }
         }
 
-        $("#upcoming_shows").html(MediaDash.Util.BuildTable("Upcoming TV Shows", ["Show", "Name", "Date"], upcoming_show_table));
+        $("#upcoming_shows").html(MediaDash.Util.BuildTable("Upcoming TV Shows", ["Show", "#", "Episode", "Day"], upcoming_show_table));
     });
 
     $.ajax(settings.nzbdrone_url + "/History",
@@ -38,7 +54,7 @@ MediaDash.NZBDrone.Update = function() {
             sortKey: "date",
             sortDir: "desc",
             filterKey: "eventType",
-            filterValue: 1
+            filterValue: 3
         }
     })
     .done(function(data) {
@@ -49,16 +65,23 @@ MediaDash.NZBDrone.Update = function() {
             var show = data.records[s];
             var show_date = new Date(show.date);
 
-            downloaded_table.push([show.series.title, show.episode.title, MediaDash.Util.weekdays[show_date.getDay()] + " " + show_date.toLocaleTimeString()]);
+            downloaded_table.push(
+                [
+                    sprintf("<strong>%s</strong>", show.series.title), 
+                    sprintf("S%02dE%02d", parseInt(show.episode.seasonNumber), parseInt(show.episode.episodeNumber)),
+                    nzbdrone.TruncateEpisodeTitle(show.episode.title),
+                    MediaDash.Util.weekdays[show_date.getDay()] 
+                ]
+            );
         }
 
-        $("#downloaded_shows").html(MediaDash.Util.BuildTable("Recently Downloaded TV Shows", ["Show", "Name", "Date"], downloaded_table));
+        $("#downloaded_shows").html(MediaDash.Util.BuildTable("Recently Downloaded TV Shows", ["Show", "#", "Episode", "Day"], downloaded_table));
     });
 
-    setTimeout(MediaDash.NZBDrone.Update, settings.nzbdrone_refresh_interval);
+    setTimeout(function() { MediaDash.NZBDrone.Update(); }, settings.nzbdrone_refresh_interval);
 }
 
 // register self
 if(MediaDashSettings.enable_nzbdrone) {
-    MediaDash.RegisterStartupFunction(MediaDash.NZBDrone.Update);
+    MediaDash.RegisterStartupFunction(function() { MediaDash.NZBDrone.Update(); });
 }

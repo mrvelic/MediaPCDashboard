@@ -11,6 +11,10 @@ MediaDash.SysInfo.GetDisplayMountPoint = function(mount_point)
     return undefined;
 }
 
+MediaDash.SysInfo.BytesToGB = function(bytes_amt) {
+    return (((bytes_amt / 1024) / 1024) / 1024).toFixed(2);
+}
+
 MediaDash.SysInfo.Update = function() {
     var settings = MediaDashSettings;
     var state = MediaDash.State;
@@ -44,22 +48,62 @@ MediaDash.SysInfo.Update = function() {
             // format data / create charts etc
             var width = 12 / disk_data.length;
 
+            var disk_table_data = [];
+            var progress_bar_html 
+                = "<div class='progress' style='margin-bottom: 2px;'>" 
+                    + "<div class='progress-bar progress-bar-danger' style='width: %d%%'></div>"
+                    + "<div class='progress-bar progress-bar-info' style='width: %d%%'></div>"
+                + "</div>"
+                + "<div>"
+                    + "<div class='pull-left'>%s GB</div>"
+                    + "<div class='pull-right'>%s GB</div>"
+                    + "<div class='clearfix'></div>"
+                + "</div>"
+
             for(m in disk_data) {
                 var mount = disk_data[m];
 
-                state.disk_usage_data.push([{ title: "Used", value: (((mount.Used / 1024) / 1024) / 1024).toFixed(2) }, { title: "Available", value: (((mount.Free / 1024) / 1024) / 1024).toFixed(2) }]);
+                if(settings.SysInfo.disk_space_pie) {
+                    // setup pie chart data
+                    state.disk_usage_data.push([{ title: "Used", value: sysinfo.BytesToGB(mount.Used) }, { title: "Available", value: sysinfo.BytesToGB(mount.Free) }]);
 
-                if(!state.disk_charts_created) {
-                    MediaDash.Util.CreateDiskSpaceChart(mount.DisplayName, state.disk_usage_data[m], m, width);
+                    if(!state.disk_charts_created) {
+                        MediaDash.Util.CreateDiskSpaceChart(mount.DisplayName, state.disk_usage_data[m], m, width);
+                    }
+
+                    // update pie chart
+                    state.disk_charts[m].dataProvider = state.disk_usage_data[m];
+                    state.disk_charts[m].validateData();
+
+                    $("#disk_chart_sizes_" + m).html(state.disk_usage_data[m][1].value + " GB Free | " + state.disk_usage_data[m][0].value + " GB Used");
+                } else {
+                    // build progress bar table
+                    var used_percentage = parseInt(mount.Percent);
+                    var free_percentage = 100 - used_percentage;
+
+                    disk_table_data.push
+                    (
+                        [
+                            mount.DisplayName, 
+                            sprintf
+                            (
+                                progress_bar_html, 
+                                used_percentage,
+                                free_percentage,
+                                sysinfo.BytesToGB(parseFloat(mount.Used)),
+                                sysinfo.BytesToGB(parseFloat(mount.Free))
+                            )
+                        ]
+                    );
+
                 }
-
-                state.disk_charts[m].dataProvider = state.disk_usage_data[m];
-                state.disk_charts[m].validateData();
-
-                $("#disk_chart_sizes_" + m).html(state.disk_usage_data[m][1].value + " GB Free | " + state.disk_usage_data[m][0].value + " GB Used");
             }
 
-            if(!state.disk_charts_created) state.disk_charts_created = true;
+            if(settings.SysInfo.disk_space_pie) {
+                if(!state.disk_charts_created) state.disk_charts_created = true;
+            } else {
+                $("#disk_space_charts").html(MediaDash.Util.BuildTable("Disk Usage", ["Mount", "Usage"], disk_table_data));
+            }
         }
 
         // Check temperatures
